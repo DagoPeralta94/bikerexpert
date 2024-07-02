@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Bike Expert"
 include(":app")
+include(":data")
