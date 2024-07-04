@@ -1,4 +1,4 @@
-package com.devdmp.bikeexpert.presentation.initialform.navigation
+package com.devdmp.bikeexpert.navigation
 
 import kotlinx.serialization.Serializable
 

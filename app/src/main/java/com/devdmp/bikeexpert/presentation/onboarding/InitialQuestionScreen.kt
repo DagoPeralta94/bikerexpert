@@ -1,4 +1,4 @@
-package com.devdmp.bikeexpert.presentation.initialform
+package com.devdmp.bikeexpert.presentation.onboarding
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
