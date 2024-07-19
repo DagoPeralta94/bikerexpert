@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.google.gms.services)
+    alias(libs.plugins.crashlytics)
 }
 
 android {
@@ -79,4 +80,5 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
 }
