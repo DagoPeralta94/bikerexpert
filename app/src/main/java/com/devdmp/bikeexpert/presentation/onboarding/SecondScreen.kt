@@ -9,11 +9,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import com.devdmp.bikeexpert.BakingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecondScreen(goToBack: () -> Unit) {
+fun SecondScreen(goToBack: () -> Unit, bakingViewModel: BakingViewModel) {
+    val bikeTypes by bakingViewModel.bikeTypes.collectAsState()
     Column {
         CenterAlignedTopAppBar(title = {
             Text(text = "Second Screen")
@@ -27,5 +31,9 @@ fun SecondScreen(goToBack: () -> Unit) {
                     )
                 }
             })
+        Text("Bike Types:")
+        bikeTypes.forEach { bikeType ->
+            Text(bikeType.name)
+        }
     }
 }

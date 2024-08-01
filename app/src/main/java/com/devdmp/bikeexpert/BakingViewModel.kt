@@ -3,6 +3,7 @@ package com.devdmp.bikeexpert
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.devdmp.bikeexpert.presentation.onboarding.BikeType
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,9 @@ class BakingViewModel @Inject constructor() : ViewModel() {
         MutableStateFlow(UiState.Initial)
     val uiState: StateFlow<UiState> =
         _uiState.asStateFlow()
+
+    private val _bikeTypes: MutableStateFlow<List<BikeType>> = MutableStateFlow(emptyList())
+    val bikeTypes: StateFlow<List<BikeType>> = _bikeTypes.asStateFlow()
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-pro-vision",
@@ -46,5 +50,9 @@ class BakingViewModel @Inject constructor() : ViewModel() {
                 _uiState.value = UiState.Error(e.localizedMessage ?: "")
             }
         }
+    }
+
+    fun updateBikeTypes(selectedBikeTypes: List<BikeType>) {
+        _bikeTypes.value = selectedBikeTypes
     }
 }
