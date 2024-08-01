@@ -83,7 +83,7 @@ dependencies {
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
-    implementation("com.google.dagger:hilt-android:2.47")
-    kapt("com.google.dagger:hilt-android-compiler:2.47")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
 }

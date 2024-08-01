@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.0"
+hiltAndroid = "2.47"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -14,16 +15,18 @@ googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 jetbrainsKotlinJvm = "1.9.0"
-navigationCompose = "2.8.0-beta04"
+navigationCompose = "2.8.0-beta06"
 kotlinxSerialization = "1.6.3"
 googleGmsServices = "4.4.2"
 firebaseBom = "33.1.1"
 crashlytics = "3.0.2"
 daggerHilt = "2.47"
-hiltNavigationCompose = "1.0.0"
+hiltNavigationCompose = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
