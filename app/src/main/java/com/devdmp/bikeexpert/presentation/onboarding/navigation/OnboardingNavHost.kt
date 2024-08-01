@@ -19,9 +19,9 @@ internal fun NavGraphBuilder.onboarding(
         }
     }
     composable<FirstScreenNav> {
-        InitialQuestionScreen {
+        InitialQuestionScreen( navigateSecondScreen = {
             navigationController.navigate(SecondScreenNav)
-        }
+        })
     }
     composable<SecondScreenNav> {
         SecondScreen {

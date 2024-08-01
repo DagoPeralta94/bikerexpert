@@ -12,7 +12,9 @@ import androidx.navigation.compose.rememberNavController
 import com.devdmp.bikeexpert.navigation.WelcomeScreenNav
 import com.devdmp.bikeexpert.presentation.onboarding.navigation.onboarding
 import com.devdmp.bikeexpert.ui.theme.BikeExpertTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

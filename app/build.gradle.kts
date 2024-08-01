@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.google.gms.services)
     alias(libs.plugins.crashlytics)
+    id("kotlin-kapt")
+    alias(libs.plugins.daggerHilt)
 }
 
 android {
@@ -81,4 +83,7 @@ dependencies {
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
+    implementation("com.google.dagger:hilt-android:2.47")
+    kapt("com.google.dagger:hilt-android-compiler:2.47")
+    implementation(libs.hilt.navigation.compose)
 }

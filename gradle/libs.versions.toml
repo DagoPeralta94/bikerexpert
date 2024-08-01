@@ -19,6 +19,8 @@ kotlinxSerialization = "1.6.3"
 googleGmsServices = "4.4.2"
 firebaseBom = "33.1.1"
 crashlytics = "3.0.2"
+daggerHilt = "2.47"
+hiltNavigationCompose = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,6 +45,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization"}
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -53,5 +56,6 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
 google-gms-services = { id = "com.google.gms.google-services", version.ref = "googleGmsServices"}
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
+daggerHilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 
 
