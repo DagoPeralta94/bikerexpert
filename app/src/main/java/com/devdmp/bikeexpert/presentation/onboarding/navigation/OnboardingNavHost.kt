@@ -8,12 +8,14 @@ import com.devdmp.bikeexpert.navigation.FirstScreenNav
 import com.devdmp.bikeexpert.navigation.SecondScreenNav
 import com.devdmp.bikeexpert.navigation.WelcomeScreenNav
 import com.devdmp.bikeexpert.presentation.onboarding.InitialQuestionScreen
+import com.devdmp.bikeexpert.presentation.onboarding.OnboardingViewModel
 import com.devdmp.bikeexpert.presentation.onboarding.SecondScreen
 import com.devdmp.bikeexpert.presentation.onboarding.WelcomeScreen
 
 internal fun NavGraphBuilder.onboarding(
     navigationController: NavController,
-    bakingViewModel: BakingViewModel
+    bakingViewModel: BakingViewModel,
+    onboardingViewModel: OnboardingViewModel
 ) {
     composable<WelcomeScreenNav> {
         WelcomeScreen {
@@ -21,14 +23,17 @@ internal fun NavGraphBuilder.onboarding(
         }
     }
     composable<FirstScreenNav> {
-        InitialQuestionScreen(navigateSecondScreen = {
-            navigationController.navigate(SecondScreenNav)
-        }, bakingViewModel = bakingViewModel)
+        InitialQuestionScreen(
+            navigateSecondScreen = {
+                navigationController.navigate(SecondScreenNav)
+            }, bakingViewModel = bakingViewModel, onboardingViewModel = onboardingViewModel
+        )
     }
     composable<SecondScreenNav> {
-        SecondScreen(goToBack = {
-            navigationController.popBackStack()
-        }, bakingViewModel = bakingViewModel
+        SecondScreen(
+            goToBack = {
+                navigationController.popBackStack()
+            }, bakingViewModel = bakingViewModel, onboardingViewModel = onboardingViewModel
         )
     }
 }

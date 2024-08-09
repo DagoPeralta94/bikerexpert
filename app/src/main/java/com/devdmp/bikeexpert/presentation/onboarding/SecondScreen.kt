@@ -16,8 +16,9 @@ import com.devdmp.bikeexpert.BakingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecondScreen(goToBack: () -> Unit, bakingViewModel: BakingViewModel) {
+fun SecondScreen(goToBack: () -> Unit, bakingViewModel: BakingViewModel, onboardingViewModel: OnboardingViewModel) {
     val bikeTypes by bakingViewModel.bikeTypes.collectAsState()
+    val cylinderCapacity by onboardingViewModel.selectedBrandModel.collectAsState()
     Column {
         CenterAlignedTopAppBar(title = {
             Text(text = "Second Screen")
@@ -34,6 +35,10 @@ fun SecondScreen(goToBack: () -> Unit, bakingViewModel: BakingViewModel) {
         Text("Bike Types:")
         bikeTypes.forEach { bikeType ->
             Text(bikeType.name)
+        }
+        Text("Cylinder Capacity:")
+        cylinderCapacity.cylinderCapacity?.let { cylinderCapacity ->
+            Text(cylinderCapacity)
         }
     }
 }
