@@ -6,10 +6,12 @@ import androidx.navigation.compose.composable
 import com.devdmp.bikeexpert.BakingViewModel
 import com.devdmp.bikeexpert.navigation.FirstScreenNav
 import com.devdmp.bikeexpert.navigation.SecondScreenNav
+import com.devdmp.bikeexpert.navigation.ThirdScreenNav
 import com.devdmp.bikeexpert.navigation.WelcomeScreenNav
 import com.devdmp.bikeexpert.presentation.onboarding.InitialQuestionScreen
 import com.devdmp.bikeexpert.presentation.onboarding.OnboardingViewModel
 import com.devdmp.bikeexpert.presentation.onboarding.SecondScreen
+import com.devdmp.bikeexpert.presentation.onboarding.ThirdScreen
 import com.devdmp.bikeexpert.presentation.onboarding.WelcomeScreen
 
 internal fun NavGraphBuilder.onboarding(
@@ -24,16 +26,31 @@ internal fun NavGraphBuilder.onboarding(
     }
     composable<FirstScreenNav> {
         InitialQuestionScreen(
+            goToBack = {
+                navigationController.popBackStack()
+            },
             navigateSecondScreen = {
                 navigationController.navigate(SecondScreenNav)
-            }, bakingViewModel = bakingViewModel, onboardingViewModel = onboardingViewModel
+            }, onboardingViewModel = onboardingViewModel
         )
     }
     composable<SecondScreenNav> {
         SecondScreen(
             goToBack = {
                 navigationController.popBackStack()
-            }, bakingViewModel = bakingViewModel, onboardingViewModel = onboardingViewModel
+            },
+            goToThirdScreen = {
+                navigationController.navigate(ThirdScreenNav)
+            },
+            onboardingViewModel = onboardingViewModel
+        )
+    }
+    composable<ThirdScreenNav> {
+        ThirdScreen(
+            goToBack = {
+                navigationController.popBackStack()
+            },
+            onboardingViewModel = onboardingViewModel
         )
     }
 }

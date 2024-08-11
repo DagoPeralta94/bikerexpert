@@ -6,22 +6,30 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.devdmp.bikeexpert.BakingViewModel
+import androidx.compose.ui.unit.sp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InitialQuestionScreen(
+    goToBack: () -> Unit,
     navigateSecondScreen: () -> Unit,
-    bakingViewModel: BakingViewModel,
     onboardingViewModel: OnboardingViewModel
 ) {
     Column(
@@ -29,80 +37,41 @@ fun InitialQuestionScreen(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
         val optionsCylinderCapacity = listOf("100-200cc", "200-500cc", "600-1200cc")
-        /* val listModelBiker = listOf(
-            BikeType(
-                "Bike",
-                "A bike is a two-wheeled motor vehicle that is powered by an internal combustion engine.",
-                true
-            ),
-            BikeType(
-                "Mountain Bike",
-                "A mountain bike is a two-wheeled motor vehicle that is powered by an internal combustion engine.",
-                false
-            ),
-            BikeType(
-                "Road Bike",
-                "A road bike is a two-wheeled motor vehicle that is powered by an internal combustion engine.",
-                false
-            ),
-            BikeType(
-                "E-Bike",
-                "An e-bike is a two-wheeled motor vehicle that is powered by an internal combustion engine.",
-                false
-            ),
-            BikeType(
-                "Cruiser",
-                "A cruiser is a two-wheeled motor vehicle that is powered by an internal combustion engine.",
-                false
-            ),
-            BikeType(
-                "Electric Scooter",
-                "An electric scooter is a two-wheeled motor vehicle that is powered by an internal combustion engine.",
-                false
-            ),
-            BikeType(
-                "Electric Motorcycle",
-                "An electric motorcycle is a two-wheeled motor vehicle that is powered by an internal combustion engine.",
-                false
-            ),
-            BikeType(
-                "Motorcycle",
-                "A motorcycle is a two-wheeled motor vehicle that is powered by an internal combustion engine.",
-                false
-            ),
-            BikeType(
-                "Scooter",
-                "A scooter is a two-wheeled motor vehicle that is powered by an internal combustion engine.",
-                false
-            )
-        )*/
-        val selectedBikeTypes = remember { mutableStateListOf<BikeType>() }
-
         Column {
-            optionsCylinderCapacity.forEach { item ->
-                ItemCylinderCapacity(name = item, onItemSelected = { selectedItem ->
-                    onboardingViewModel.updateCylinderCapacity(selectedItem)
+            CenterAlignedTopAppBar(title = {
+                Text(
+                    text = "First selection",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+                navigationIcon = {
+                    TextButton(onClick = { goToBack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null,
+                            tint = Color.Black
+                        )
+                    }
                 })
-            }
-        }
-
-        Button(onClick = {
-            bakingViewModel.updateBikeTypes(selectedBikeTypes)
-            navigateSecondScreen()
-        }) {
-            Text(text = "To second screen")
-        }
-    }
-}
-
-@Composable fun ItemCylinderCapacity(name: String, onItemSelected: (String) -> Unit) {
-    LazyColumn {
-        item {
-            Card(modifier = Modifier.size(150.dp).padding(16.dp), onClick = {
-                onItemSelected(name)
-            }) {
-                Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = name)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Select your cylinder capacity to motorcycle",
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+                optionsCylinderCapacity.forEach { item ->
+                    ItemCylinderCapacity(name = item, onItemSelected = { selectedItem ->
+                        onboardingViewModel.updateCylinderCapacity(selectedItem)
+                        navigateSecondScreen()
+                    })
                 }
             }
         }
@@ -110,17 +79,27 @@ fun InitialQuestionScreen(
 }
 
 @Composable
-fun ItemSelection(item: BikeType, onItemSelected: (BikeType) -> Unit) {
-    DropdownMenuItem(
-        onClick = {
-            onItemSelected(item)
-        },
-        text = {
-            Text(text = item.name)
+fun ItemCylinderCapacity(name: String, onItemSelected: (String) -> Unit) {
+    LazyColumn {
+        item {
+            Card(modifier = Modifier
+                .size(150.dp)
+                .padding(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                onClick = {
+                    onItemSelected(name)
+                }) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = name)
+                }
+            }
         }
-    )
+    }
 }
-
 
 data class BikeType(val name: String, val description: String, val isSelected: Boolean)
 
@@ -139,14 +118,6 @@ data class BrandModel(
     val model: String
 )
 
-
-
-
-val tiposMotoPorCilindrada = mapOf(
-    "100-200cc" to listOf("Ciudad", "Aventura", "Cross", "Scooter"),
-    "200-500cc" to listOf("Ciudad", "Aventura", "Deportiva", "Touring"),
-    "600-1200cc" to listOf("Aventura", "Deportiva", "Touring", "Naked")
-)
 val motosPorTipoYCilindrada = mapOf(
     "100-200cc" to mapOf(
         "Ciudad" to listOf("Honda CB110", "Bajaj Boxer CT100", "Yamaha YBR 125"),
