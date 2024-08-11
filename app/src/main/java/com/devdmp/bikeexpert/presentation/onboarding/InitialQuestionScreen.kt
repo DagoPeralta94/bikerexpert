@@ -1,5 +1,6 @@
 package com.devdmp.bikeexpert.presentation.onboarding
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +17,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,16 +36,30 @@ fun InitialQuestionScreen(
     onboardingViewModel: OnboardingViewModel
 ) {
     Column(
-        Modifier.fillMaxSize(),
+        Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.Black.copy(alpha = 0.7f)
+                    )
+                )
+            ),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
         val optionsCylinderCapacity = listOf("100-200cc", "200-500cc", "600-1200cc")
         Column {
-            CenterAlignedTopAppBar(title = {
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
+                ),
+                title = {
                 Text(
                     text = "First selection",
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
             },
                 navigationIcon = {
@@ -50,7 +67,7 @@ fun InitialQuestionScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null,
-                            tint = Color.Black
+                            tint = Color.White
                         )
                     }
                 })
@@ -65,7 +82,8 @@ fun InitialQuestionScreen(
                     text = "Select your cylinder capacity to motorcycle",
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
                 optionsCylinderCapacity.forEach { item ->
                     ItemCylinderCapacity(name = item, onItemSelected = { selectedItem ->

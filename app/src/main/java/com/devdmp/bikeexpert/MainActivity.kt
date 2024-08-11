@@ -10,8 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.devdmp.bikeexpert.navigation.WelcomeScreenNav
+import com.devdmp.bikeexpert.navigation.LoginScreenNav
 import com.devdmp.bikeexpert.presentation.home.navigation.home
+import com.devdmp.bikeexpert.presentation.login.navigation.login
 import com.devdmp.bikeexpert.presentation.onboarding.OnboardingViewModel
 import com.devdmp.bikeexpert.presentation.onboarding.navigation.onboarding
 import com.devdmp.bikeexpert.ui.theme.BikeExpertTheme
@@ -32,8 +33,11 @@ class MainActivity : ComponentActivity() {
                     val navigationController = rememberNavController()
                     NavHost(
                         navController = navigationController,
-                        startDestination = WelcomeScreenNav
+                        startDestination = LoginScreenNav
                     ) {
+                        login(
+                            navigationController = navigationController
+                        )
                         onboarding(
                             navigationController = navigationController,
                             bakingViewModel = bakingViewModel,
