@@ -1,6 +1,7 @@
 package com.devdmp.bikeexpert.presentation.onboarding
 
 import androidx.lifecycle.ViewModel
+import com.devdmp.bikeexpert.UiState
 import com.devdmp.data.onboarding.dto.SelectedBrandModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,6 +11,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor() : ViewModel() {
+
+    private val _uiState: MutableStateFlow<UiState> =
+        MutableStateFlow(UiState.Initial)
+    val uiState: StateFlow<UiState> =
+        _uiState.asStateFlow()
 
     private val _selectedBrandModel: MutableStateFlow<SelectedBrandModel> =
         MutableStateFlow(SelectedBrandModel())
@@ -30,6 +36,10 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
 
     fun updateModel(selectedModel: String) {
         _selectedBrandModel.value.setModels(selectedModel)
+    }
+
+    fun sendModel(model: SelectedBrandModel) {
+        _uiState.value = UiState.Loading
     }
 
 

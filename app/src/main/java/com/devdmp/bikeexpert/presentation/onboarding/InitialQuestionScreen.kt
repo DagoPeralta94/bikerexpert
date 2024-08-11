@@ -118,28 +118,3 @@ data class BrandModel(
     val model: String
 )
 
-val motosPorTipoYCilindrada = mapOf(
-    "100-200cc" to mapOf(
-        "Ciudad" to listOf("Honda CB110", "Bajaj Boxer CT100", "Yamaha YBR 125"),
-        "Aventura" to listOf("Honda XR150L", "Yamaha XTZ 125", "Suzuki DR150"),
-        "Cross" to listOf("AKT TT 125", "Honda XR190L", "Yamaha XTZ 125"),
-        "Scooter" to listOf("Honda Dio", "Yamaha BWS", "Suzuki Address 110")
-    ),
-    "200-500cc" to mapOf(
-        "Ciudad" to listOf("Bajaj Pulsar 200NS", "Yamaha FZ25", "Suzuki Gixxer 250"),
-        "Aventura" to listOf(
-            "Kawasaki Versys 300",
-            "Royal Enfield Himalayan 411",
-            "Suzuki V-Strom 250"
-        ),
-        "Deportiva" to listOf("Kawasaki Ninja 300", "Yamaha R3", "Honda CBR300R"),
-        "Touring" to listOf("Benelli TRK 502", "Kawasaki Versys 300", "Suzuki V-Strom 250")
-    ),
-    "600-1200cc" to mapOf(
-        "Aventura" to listOf("BMW F850GS", "Kawasaki Versys 650", "Suzuki V-Strom 650"),
-        "Deportiva" to listOf("Kawasaki Ninja ZX-6R", "Yamaha YZF-R6", "Honda CBR600RR"),
-        "Touring" to listOf("BMW R1200GS", "Kawasaki Versys 1000", "Suzuki V-Strom 1050"),
-        "Naked" to listOf("Yamaha MT-09", "Kawasaki Z900", "Honda CB650R")
-    )
-)
-
