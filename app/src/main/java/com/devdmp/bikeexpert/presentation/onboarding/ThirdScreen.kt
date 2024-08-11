@@ -39,7 +39,11 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ThirdScreen(goToBack: () -> Unit, onboardingViewModel: OnboardingViewModel) {
+fun ThirdScreen(
+    goToHome: () -> Unit,
+    goToBack: () -> Unit,
+    onboardingViewModel: OnboardingViewModel
+) {
     val cylinderCapacity by onboardingViewModel.selectedBrandModel.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     Column {
@@ -143,7 +147,10 @@ fun ThirdScreen(goToBack: () -> Unit, onboardingViewModel: OnboardingViewModel) 
                         ) {
                             Button(
                                 modifier = Modifier.size(height = 42.dp, width = 100.dp),
-                                onClick = { onboardingViewModel.sendModel(cylinderCapacity) }) {
+                                onClick = {
+                                    goToHome()
+                                    onboardingViewModel.sendModel(cylinderCapacity)
+                                }) {
                                 Text(text = "Yes")
                             }
                             Button(

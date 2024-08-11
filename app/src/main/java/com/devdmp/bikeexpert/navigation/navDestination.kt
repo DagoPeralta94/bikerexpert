@@ -13,3 +13,6 @@ object SecondScreenNav
 
 @Serializable
 object ThirdScreenNav
+
+@Serializable
+object HomeScreenNav

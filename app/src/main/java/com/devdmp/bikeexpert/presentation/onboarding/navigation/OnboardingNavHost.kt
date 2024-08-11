@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.devdmp.bikeexpert.BakingViewModel
 import com.devdmp.bikeexpert.navigation.FirstScreenNav
+import com.devdmp.bikeexpert.navigation.HomeScreenNav
 import com.devdmp.bikeexpert.navigation.SecondScreenNav
 import com.devdmp.bikeexpert.navigation.ThirdScreenNav
 import com.devdmp.bikeexpert.navigation.WelcomeScreenNav
@@ -47,6 +48,9 @@ internal fun NavGraphBuilder.onboarding(
     }
     composable<ThirdScreenNav> {
         ThirdScreen(
+            goToHome = {
+                navigationController.navigate(HomeScreenNav)
+            },
             goToBack = {
                 navigationController.popBackStack()
             },

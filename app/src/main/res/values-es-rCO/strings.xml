@@ -12,4 +12,6 @@
     <string name="welcome_message">Bienvenido a la aplicación experta en motos</string>
     <string name="welcome_description">Join us and start exploring now with the help of our expert motorcycle assistant, available to answer your basic and advanced questions about bike care and maintenance.</string>
     <string name="welcome_start_button">Get started</string>
+    <string name="image4_description">Chain picture</string>
+    <string name="image5_description">Picture chain two</string>
 </resources>

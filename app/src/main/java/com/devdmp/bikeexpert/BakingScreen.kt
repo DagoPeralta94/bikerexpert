@@ -44,11 +44,15 @@ val images = arrayOf(
     R.drawable.baked_goods_2,
     // Image generated using Gemini from the prompt "cake images"
     R.drawable.baked_goods_3,
+    R.drawable.picturechain,
+    R.drawable.picturechaintwo,
 )
 val imageDescriptions = arrayOf(
     R.string.image1_description,
     R.string.image2_description,
     R.string.image3_description,
+    R.string.image4_description,
+    R.string.image5_description,
 )
 
 @Composable
