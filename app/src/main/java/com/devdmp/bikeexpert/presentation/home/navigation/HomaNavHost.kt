@@ -9,17 +9,19 @@ import com.devdmp.bikeexpert.navigation.LoginScreenNav
 import com.devdmp.bikeexpert.presentation.home.HomeScreen
 import com.devdmp.bikeexpert.presentation.onboarding.OnboardingViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 internal fun NavGraphBuilder.home(
     navigationController: NavController,
     bakingViewModel: BakingViewModel,
     onboardingViewModel: OnboardingViewModel,
-    auth: FirebaseAuth
+    auth: FirebaseAuth,
+    db: FirebaseFirestore
 ) {
     composable<HomeScreenNav> {
         HomeScreen(goToLogOut = {
             navigationController.navigate(LoginScreenNav)
             auth.signOut()
-        })
+        }, bakingViewModel = bakingViewModel, db = db)
     }
 }

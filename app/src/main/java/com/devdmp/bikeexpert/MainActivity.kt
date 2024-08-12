@@ -77,7 +77,8 @@ class MainActivity : ComponentActivity() {
                             navigationController = navigationController,
                             bakingViewModel = bakingViewModel,
                             onboardingViewModel = onboardingViewModel,
-                            auth = auth
+                            auth = auth,
+                            db = db
                         )
                     }
                 }

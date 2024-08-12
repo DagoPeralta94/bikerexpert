@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devdmp.bikeexpert.presentation.onboarding.BikeType
+import com.devdmp.data.onboarding.dto.SelectedBrandModel
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +22,10 @@ class BakingViewModel @Inject constructor() : ViewModel() {
     val uiState: StateFlow<UiState> =
         _uiState.asStateFlow()
 
-    private val _bikeTypes: MutableStateFlow<List<BikeType>> = MutableStateFlow(emptyList())
-    val bikeTypes: StateFlow<List<BikeType>> = _bikeTypes.asStateFlow()
+    private val _bikePrefsUser: MutableStateFlow<SelectedBrandModel> =
+        MutableStateFlow(SelectedBrandModel())
+    val bikePrefsUser: StateFlow<SelectedBrandModel> =
+        _bikePrefsUser.asStateFlow()
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash",
@@ -52,7 +55,10 @@ class BakingViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun updateBikeTypes(selectedBikeTypes: List<BikeType>) {
-        _bikeTypes.value = selectedBikeTypes
+    fun updateUserPrefs(model: String, brand: String, cylinderCapacity: String, bikeType: String) {
+        _bikePrefsUser.value.setModels(model)
+        _bikePrefsUser.value.setBrands(brand)
+        _bikePrefsUser.value.setBikeTypes(bikeType)
+        _bikePrefsUser.value.setCylinderCapacitys(cylinderCapacity)
     }
 }

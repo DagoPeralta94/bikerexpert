@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devdmp.data.onboarding.dto.Prefs
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -308,6 +309,7 @@ fun ThirdScreen(
                                 .padding(vertical = 8.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
+                            val userId = FirebaseAuth.getInstance().currentUser?.uid
                             val userPrefsBiker = hashMapOf(
                                 "model" to cylinderCapacity.model,
                                 "brand" to cylinderCapacity.brand,
@@ -317,14 +319,20 @@ fun ThirdScreen(
                             Button(
                                 modifier = Modifier.size(height = 42.dp, width = 100.dp),
                                 onClick = {
-                                    db.collection("user_prefs_biker").add(userPrefsBiker).addOnSuccessListener {
-                                        Log.d("Success", "DocumentSnapshot successfully written!")
-                                        prefs.onboardingCompleted = true
-                                        goToHome()
+                                    if (userId != null) {
+                                        db.collection("user_prefs_biker").document(userId)
+                                            .set(userPrefsBiker).addOnSuccessListener {
+                                                Log.d(
+                                                    "Success",
+                                                    "DocumentSnapshot successfully written!"
+                                                )
+                                                prefs.onboardingCompleted = true
+                                                goToHome()
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.w("Error", "Error writing document", e)
+                                            }
                                     }
-                                        .addOnFailureListener { e ->
-                                            Log.w("Error", "Error writing document", e)
-                                        }
                                 }) {
                                 Text(text = "Yes")
                             }
