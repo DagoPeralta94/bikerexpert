@@ -60,7 +60,8 @@ class MainActivity : ComponentActivity() {
                         login(
                             navigationController = navigationController,
                             auth = auth,
-                            prefs = prefs
+                            prefs = prefs,
+                            context = this@MainActivity
                         )
                         onboarding(
                             navigationController = navigationController,

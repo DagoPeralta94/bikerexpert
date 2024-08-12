@@ -63,14 +63,8 @@ fun LoginScreen(
     goToLoginFacebook: () -> Unit = {},
     auth: FirebaseAuth
 ) {
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
     var isSignUp by remember { mutableStateOf(false) }
     var isRegister by remember { mutableStateOf(false) }
-    val focusRequester = FocusRequester()
-    val focusManager = LocalFocusManager.current
-    val context = LocalContext.current
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -84,296 +78,24 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White.copy(alpha = 0.27f))
-        ) {
-        }
+        )
         if (isSignUp && !isRegister) {
-            Column(
-                modifier = Modifier
-                    .padding(32.dp)
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = "Sign up", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    onClick = { goToLoginFree() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.7f))
-                ) {
-                    Text(text = "Sign up free")
-                }
-                CustomButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(CircleShape),
-                    painter = painterResource(R.drawable.ic_google),
-                    title = "Sign up with Google",
-                    onClick = { goToLoginGoogle() }
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                CustomButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(CircleShape),
-                    painter = painterResource(R.drawable.ic_facebook),
-                    title = "Sign up with Facebook",
-                    onClick = { goToLoginFacebook() }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .clickable { isSignUp = false }
-                        .background(Color.Black.copy(alpha = 0.7f))
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth(),
-                        text = "Already have an account? Sign in",
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-            }
+            SignUpScreen(
+                isSignUp = { isSignUp = it },
+                goToLoginFree = goToLoginFree
+            )
         } else {
             if (isRegister) {
-                Column(
-                    modifier = Modifier
-                        .padding(32.dp)
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(text = "Register", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    OutlinedTextField(
-                        value = email.value,
-                        placeholder = { Text(text = "Email") },
-                        onValueChange = { email.value = it },
-                        maxLines = 1,
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Next
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onNext = {
-                                focusRequester.requestFocus()
-                            }
-                        ),
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedPlaceholderColor = Color.White.copy(alpha = 0.8f),
-                            unfocusedPlaceholderColor = Color.White.copy(alpha = 0.6f),
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color.Black,
-                            unfocusedContainerColor = Color.Black.copy(alpha = 0.4f),
-                            focusedContainerColor = Color.Black.copy(alpha = 0.6f),
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    OutlinedTextField(
-                        value = password.value,
-                        placeholder = { Text(text = "Password") },
-                        onValueChange = { password.value = it },
-                        maxLines = 1,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .focusRequester(focusRequester),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                focusManager.clearFocus()
-                            }
-                        ),
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        trailingIcon = {
-                            val image = if (passwordVisible)
-                                Icons.Filled.KeyboardArrowDown
-                            else Icons.Filled.KeyboardArrowUp
-
-                            val description =
-                                if (passwordVisible) "Hide password" else "Show password"
-
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                                Icon(
-                                    imageVector = image,
-                                    contentDescription = description,
-                                    tint = Color.White
-                                )
-                            }
-                        },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedPlaceholderColor = Color.White.copy(alpha = 0.8f),
-                            unfocusedPlaceholderColor = Color.White.copy(alpha = 0.6f),
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color.Black,
-                            unfocusedContainerColor = Color.Black.copy(alpha = 0.4f),
-                            focusedContainerColor = Color.Black.copy(alpha = 0.6f),
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = {
-                            auth.createUserWithEmailAndPassword(email.value, password.value)
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful) {
-                                        Log.d("LoginScreen", "Success")
-                                        goToLogin()
-                                    } else {
-                                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.7f))
-                    ) {
-                        Text(text = "Login")
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = { isRegister = false },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.6f))
-                    ) {
-                        Text(text = "Back to sign up")
-                    }
-                }
+                RegisterScreen(
+                    goToLogin = goToLoginFree,
+                    auth = auth,
+                    isRegister = { isRegister = it })
             } else {
-                Column(
-                    modifier = Modifier
-                        .padding(32.dp)
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(text = "Sign in", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    OutlinedTextField(
-                        value = email.value,
-                        placeholder = { Text(text = "Email") },
-                        onValueChange = { email.value = it },
-                        maxLines = 1,
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Next
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onNext = {
-                                focusRequester.requestFocus()
-                            }
-                        ),
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedPlaceholderColor = Color.White.copy(alpha = 0.8f),
-                            unfocusedPlaceholderColor = Color.White.copy(alpha = 0.6f),
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color.Black,
-                            unfocusedContainerColor = Color.Black.copy(alpha = 0.4f),
-                            focusedContainerColor = Color.Black.copy(alpha = 0.6f),
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    OutlinedTextField(
-                        value = password.value,
-                        placeholder = { Text(text = "Password") },
-                        onValueChange = { password.value = it },
-                        maxLines = 1,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .focusRequester(focusRequester),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                focusManager.clearFocus()
-                            }
-                        ),
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        trailingIcon = {
-                            val image = if (passwordVisible)
-                                Icons.Filled.KeyboardArrowDown
-                            else Icons.Filled.KeyboardArrowUp
-
-                            val description =
-                                if (passwordVisible) "Hide password" else "Show password"
-
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                                Icon(
-                                    imageVector = image,
-                                    contentDescription = description,
-                                    tint = Color.White
-                                )
-                            }
-                        },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedPlaceholderColor = Color.White.copy(alpha = 0.8f),
-                            unfocusedPlaceholderColor = Color.White.copy(alpha = 0.6f),
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color.Black,
-                            unfocusedContainerColor = Color.Black.copy(alpha = 0.4f),
-                            focusedContainerColor = Color.Black.copy(alpha = 0.6f),
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = {
-                            val emailRight = validateEmail(email.value)
-                            val passwordRight = validatePassword(password.value)
-                            if (emailRight && passwordRight) {
-                                auth.signInWithEmailAndPassword(email.value, password.value)
-                                    .addOnCompleteListener {
-                                        if (it.isSuccessful) {
-                                            Log.d("LoginScreen", "Success")
-                                            goToLogin()
-                                        } else {
-                                            Toast.makeText(
-                                                context,
-                                                "Error user does not exist",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                    }
-                            } else {
-                                Toast.makeText(context, "Email or password is wrong", Toast.LENGTH_SHORT).show()
-                            }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.7f))
-                    ) {
-                        Text(text = "Login")
-                    }
-                    Button(
-                        onClick = { isSignUp = true },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.7f))
-                    ) {
-                        Text(text = "Sign up")
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = { isRegister = true },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.6f))
-                    ) {
-                        Text(text = "Don't have an account? Register email")
-                    }
-                }
+                SignInScreen(
+                    goToLogin = goToLogin,
+                    auth = auth,
+                    isSignUp = { isSignUp = it },
+                    isRegister = { isRegister = it })
             }
         }
     }
@@ -405,6 +127,335 @@ fun CustomButton(modifier: Modifier, painter: Painter, title: String, onClick: (
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
+    }
+}
+
+@Composable
+fun SignUpScreen(
+    goToLogin: () -> Unit = {},
+    goToLoginFree: () -> Unit = {},
+    goToLoginGoogle: () -> Unit = {},
+    goToLoginFacebook: () -> Unit = {},
+    isSignUp: (Boolean) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(32.dp)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = "Sign up", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { goToLoginFree() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.7f))
+        ) {
+            Text(text = "Sign up free")
+        }
+        CustomButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(CircleShape),
+            painter = painterResource(R.drawable.ic_google),
+            title = "Sign up with Google",
+            onClick = { goToLoginGoogle() }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        CustomButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(CircleShape),
+            painter = painterResource(R.drawable.ic_facebook),
+            title = "Sign up with Facebook",
+            onClick = { goToLoginFacebook() }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .clickable { isSignUp(false) }
+                .background(Color.Black.copy(alpha = 0.7f))
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                text = "Already have an account? Sign in",
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+    }
+}
+
+@Composable
+fun SignInScreen(
+    goToLogin: () -> Unit,
+    auth: FirebaseAuth,
+    isSignUp: (Boolean) -> Unit,
+    isRegister: (Boolean) -> Unit
+) {
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+    val focusRequester = FocusRequester()
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier
+            .padding(32.dp)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = "Sign in", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = email.value,
+            placeholder = { Text(text = "Email") },
+            onValueChange = { email.value = it },
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusRequester.requestFocus()
+                }
+            ),
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedPlaceholderColor = Color.White.copy(alpha = 0.8f),
+                unfocusedPlaceholderColor = Color.White.copy(alpha = 0.6f),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedBorderColor = Color.Black,
+                unfocusedContainerColor = Color.Black.copy(alpha = 0.4f),
+                focusedContainerColor = Color.Black.copy(alpha = 0.6f),
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = password.value,
+            placeholder = { Text(text = "Password") },
+            onValueChange = { password.value = it },
+            maxLines = 1,
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            ),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (passwordVisible)
+                    Icons.Filled.KeyboardArrowDown
+                else Icons.Filled.KeyboardArrowUp
+
+                val description =
+                    if (passwordVisible) "Hide password" else "Show password"
+
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        imageVector = image,
+                        contentDescription = description,
+                        tint = Color.White
+                    )
+                }
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedPlaceholderColor = Color.White.copy(alpha = 0.8f),
+                unfocusedPlaceholderColor = Color.White.copy(alpha = 0.6f),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedBorderColor = Color.Black,
+                unfocusedContainerColor = Color.Black.copy(alpha = 0.4f),
+                focusedContainerColor = Color.Black.copy(alpha = 0.6f),
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                val emailRight = validateEmail(email.value)
+                val passwordRight = validatePassword(password.value)
+                if (emailRight && passwordRight) {
+                    auth.signInWithEmailAndPassword(email.value, password.value)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                Log.d("LoginScreen", "Success")
+                                goToLogin()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Error user does not exist",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                } else {
+                    Toast.makeText(context, "Email or password is wrong", Toast.LENGTH_SHORT).show()
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.7f))
+        ) {
+            Text(text = "Login")
+        }
+        Button(
+            onClick = { isSignUp(true) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.7f))
+        ) {
+            Text(text = "Sign up")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { isRegister(true) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.6f))
+        ) {
+            Text(text = "Don't have an account? Register email")
+        }
+    }
+}
+
+@Composable
+fun RegisterScreen(goToLogin: () -> Unit, auth: FirebaseAuth, isRegister: (Boolean) -> Unit) {
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+    val focusRequester = FocusRequester()
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier
+            .padding(32.dp)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = "Register", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = email.value,
+            placeholder = { Text(text = "Email") },
+            onValueChange = { email.value = it },
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusRequester.requestFocus()
+                }
+            ),
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedPlaceholderColor = Color.White.copy(alpha = 0.8f),
+                unfocusedPlaceholderColor = Color.White.copy(alpha = 0.6f),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedBorderColor = Color.Black,
+                unfocusedContainerColor = Color.Black.copy(alpha = 0.4f),
+                focusedContainerColor = Color.Black.copy(alpha = 0.6f),
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = password.value,
+            placeholder = { Text(text = "Password") },
+            onValueChange = { password.value = it },
+            maxLines = 1,
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            ),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (passwordVisible)
+                    Icons.Filled.KeyboardArrowDown
+                else Icons.Filled.KeyboardArrowUp
+
+                val description =
+                    if (passwordVisible) "Hide password" else "Show password"
+
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        imageVector = image,
+                        contentDescription = description,
+                        tint = Color.White
+                    )
+                }
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedPlaceholderColor = Color.White.copy(alpha = 0.8f),
+                unfocusedPlaceholderColor = Color.White.copy(alpha = 0.6f),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedBorderColor = Color.Black,
+                unfocusedContainerColor = Color.Black.copy(alpha = 0.4f),
+                focusedContainerColor = Color.Black.copy(alpha = 0.6f),
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                val emailRight = validateEmail(email.value)
+                val passwordRight = validatePassword(password.value)
+                if (emailRight && passwordRight) {
+                    auth.createUserWithEmailAndPassword(email.value, password.value)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                Log.d("LoginScreen", "Success")
+                                goToLogin()
+                            } else {
+                                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Email format or password format is wrong",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.7f))
+        ) {
+            Text(text = "Login")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { isRegister(false) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.6f))
+        ) {
+            Text(text = "Back to sign up")
+        }
     }
 }
 
