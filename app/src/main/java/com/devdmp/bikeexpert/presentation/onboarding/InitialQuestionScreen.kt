@@ -48,7 +48,7 @@ fun InitialQuestionScreen(
             ),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
-        val optionsCylinderCapacity = listOf("100-200cc", "200-500cc", "600-1200cc")
+        val optionsCylinderCapacity = listOf("100-200cc", "200-500cc", "600-1200cc", "1200cc+")
         Column {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
