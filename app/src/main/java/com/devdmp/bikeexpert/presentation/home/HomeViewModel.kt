@@ -1,9 +1,9 @@
-package com.devdmp.bikeexpert
+package com.devdmp.bikeexpert.presentation.home
 
-import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.devdmp.bikeexpert.presentation.onboarding.BikeType
+import com.devdmp.bikeexpert.BuildConfig
+import com.devdmp.bikeexpert.UiState
 import com.devdmp.data.onboarding.dto.SelectedBrandModel
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BakingViewModel @Inject constructor() : ViewModel() {
+class HomeViewModel @Inject constructor() : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> =
         MutableStateFlow(UiState.Initial)
     val uiState: StateFlow<UiState> =
@@ -33,17 +33,17 @@ class BakingViewModel @Inject constructor() : ViewModel() {
     )
 
     fun sendPrompt(
-        bitmap: Bitmap,
         prompt: String
     ) {
         _uiState.value = UiState.Loading
-
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                val defaultQuery =
+                    "My motorcycle is a ${_bikePrefsUser.value.model} from ${_bikePrefsUser.value.brand} with a ${_bikePrefsUser.value.cylinderCapacity} range engine. I would like to ask you the following question about it:"
+
                 val response = generativeModel.generateContent(
                     content {
-                        image(bitmap)
-                        text(prompt)
+                        text(defaultQuery + prompt)
                     }
                 )
                 response.text?.let { outputContent ->
@@ -51,6 +51,7 @@ class BakingViewModel @Inject constructor() : ViewModel() {
                 }
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e.localizedMessage ?: "")
+
             }
         }
     }

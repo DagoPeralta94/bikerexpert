@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.devdmp.bikeexpert.navigation.HomeScreenNav
 import com.devdmp.bikeexpert.navigation.LoginScreenNav
 import com.devdmp.bikeexpert.navigation.WelcomeScreenNav
+import com.devdmp.bikeexpert.presentation.home.HomeViewModel
 import com.devdmp.bikeexpert.presentation.home.navigation.home
 import com.devdmp.bikeexpert.presentation.login.navigation.login
 import com.devdmp.bikeexpert.presentation.onboarding.OnboardingViewModel
@@ -21,15 +22,14 @@ import com.devdmp.bikeexpert.ui.theme.BikeExpertTheme
 import com.devdmp.data.onboarding.dto.Prefs
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val bakingViewModel: BakingViewModel by viewModels()
     private val onboardingViewModel: OnboardingViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var auth: FirebaseAuth
     private var startDestination: Any = LoginScreenNav
     private lateinit var prefs: Prefs
@@ -68,15 +68,13 @@ class MainActivity : ComponentActivity() {
                         )
                         onboarding(
                             navigationController = navigationController,
-                            bakingViewModel = bakingViewModel,
                             onboardingViewModel = onboardingViewModel,
                             db = db,
                             prefs = prefs
                         )
                         home(
                             navigationController = navigationController,
-                            bakingViewModel = bakingViewModel,
-                            onboardingViewModel = onboardingViewModel,
+                            homeViewModel = homeViewModel,
                             auth = auth,
                             db = db
                         )

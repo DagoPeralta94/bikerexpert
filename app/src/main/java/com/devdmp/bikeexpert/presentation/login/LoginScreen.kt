@@ -59,8 +59,6 @@ import com.google.firebase.auth.FirebaseAuth
 fun LoginScreen(
     goToLogin: () -> Unit,
     goToLoginFree: () -> Unit = {},
-    goToLoginGoogle: () -> Unit = {},
-    goToLoginFacebook: () -> Unit = {},
     auth: FirebaseAuth
 ) {
     var isSignUp by remember { mutableStateOf(false) }
@@ -132,7 +130,6 @@ fun CustomButton(modifier: Modifier, painter: Painter, title: String, onClick: (
 
 @Composable
 fun SignUpScreen(
-    goToLogin: () -> Unit = {},
     goToLoginFree: () -> Unit = {},
     goToLoginGoogle: () -> Unit = {},
     goToLoginFacebook: () -> Unit = {},

@@ -3,7 +3,6 @@ package com.devdmp.bikeexpert.presentation.onboarding.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.devdmp.bikeexpert.BakingViewModel
 import com.devdmp.bikeexpert.navigation.FirstScreenNav
 import com.devdmp.bikeexpert.navigation.HomeScreenNav
 import com.devdmp.bikeexpert.navigation.SecondScreenNav
@@ -19,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 internal fun NavGraphBuilder.onboarding(
     navigationController: NavController,
-    bakingViewModel: BakingViewModel,
     onboardingViewModel: OnboardingViewModel,
     db: FirebaseFirestore,
     prefs: Prefs
