@@ -59,7 +59,8 @@ class MainActivity : ComponentActivity() {
                     ) {
                         login(
                             navigationController = navigationController,
-                            auth = auth
+                            auth = auth,
+                            prefs = prefs
                         )
                         onboarding(
                             navigationController = navigationController,
