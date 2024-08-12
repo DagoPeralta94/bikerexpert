@@ -4,6 +4,6 @@ import androidx.compose.runtime.Composable
 import com.devdmp.bikeexpert.BakingScreen
 
 @Composable
-fun HomeScreen() {
-    BakingScreen()
+fun HomeScreen(goToLogOut: () -> Unit) {
+    BakingScreen(goToLogOut = goToLogOut)
 }

@@ -14,11 +14,13 @@ import com.devdmp.bikeexpert.presentation.onboarding.OnboardingViewModel
 import com.devdmp.bikeexpert.presentation.onboarding.SecondScreen
 import com.devdmp.bikeexpert.presentation.onboarding.ThirdScreen
 import com.devdmp.bikeexpert.presentation.onboarding.WelcomeScreen
+import com.devdmp.data.onboarding.dto.Prefs
 
 internal fun NavGraphBuilder.onboarding(
     navigationController: NavController,
     bakingViewModel: BakingViewModel,
-    onboardingViewModel: OnboardingViewModel
+    onboardingViewModel: OnboardingViewModel,
+    prefs: Prefs
 ) {
     composable<WelcomeScreenNav> {
         WelcomeScreen {
@@ -54,7 +56,8 @@ internal fun NavGraphBuilder.onboarding(
             goToBack = {
                 navigationController.popBackStack()
             },
-            onboardingViewModel = onboardingViewModel
+            onboardingViewModel = onboardingViewModel,
+            prefs = prefs
         )
     }
 }

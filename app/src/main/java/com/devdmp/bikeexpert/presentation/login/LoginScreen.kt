@@ -1,5 +1,7 @@
 package com.devdmp.bikeexpert.presentation.login
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,6 +42,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,13 +53,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devdmp.bikeexpert.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginScreen(
     goToLogin: () -> Unit,
     goToLoginFree: () -> Unit = {},
     goToLoginGoogle: () -> Unit = {},
-    goToLoginFacebook: () -> Unit = {}
+    goToLoginFacebook: () -> Unit = {},
+    auth: FirebaseAuth
 ) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -65,6 +70,7 @@ fun LoginScreen(
     var isRegister by remember { mutableStateOf(false) }
     val focusRequester = FocusRequester()
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -217,7 +223,17 @@ fun LoginScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = { goToLogin() },
+                        onClick = {
+                            auth.createUserWithEmailAndPassword(email.value, password.value)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        Log.d("LoginScreen", "Success")
+                                        goToLogin()
+                                    } else {
+                                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp, vertical = 8.dp),
@@ -313,7 +329,27 @@ fun LoginScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = { goToLogin() },
+                        onClick = {
+                            val emailRight = validateEmail(email.value)
+                            val passwordRight = validatePassword(password.value)
+                            if (emailRight && passwordRight) {
+                                auth.signInWithEmailAndPassword(email.value, password.value)
+                                    .addOnCompleteListener {
+                                        if (it.isSuccessful) {
+                                            Log.d("LoginScreen", "Success")
+                                            goToLogin()
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "Error user does not exist",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+                            } else {
+                                Toast.makeText(context, "Email or password is wrong", Toast.LENGTH_SHORT).show()
+                            }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp, vertical = 8.dp),
@@ -370,4 +406,12 @@ fun CustomButton(modifier: Modifier, painter: Painter, title: String, onClick: (
             color = Color.White
         )
     }
+}
+
+fun validateEmail(email: String): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+}
+
+fun validatePassword(password: String): Boolean {
+    return password.length in 6..20
 }

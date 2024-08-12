@@ -36,13 +36,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.devdmp.data.onboarding.dto.Prefs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThirdScreen(
     goToHome: () -> Unit,
     goToBack: () -> Unit,
-    onboardingViewModel: OnboardingViewModel
+    onboardingViewModel: OnboardingViewModel,
+    prefs: Prefs
 ) {
     val cylinderCapacity by onboardingViewModel.selectedBrandModel.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
@@ -148,6 +150,7 @@ fun ThirdScreen(
                             Button(
                                 modifier = Modifier.size(height = 42.dp, width = 100.dp),
                                 onClick = {
+                                    prefs.onboardingCompleted = true
                                     goToHome()
                                     onboardingViewModel.sendModel(cylinderCapacity)
                                 }) {
