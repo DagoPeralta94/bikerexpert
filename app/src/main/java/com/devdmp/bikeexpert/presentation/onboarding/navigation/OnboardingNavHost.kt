@@ -15,11 +15,13 @@ import com.devdmp.bikeexpert.presentation.onboarding.SecondScreen
 import com.devdmp.bikeexpert.presentation.onboarding.ThirdScreen
 import com.devdmp.bikeexpert.presentation.onboarding.WelcomeScreen
 import com.devdmp.data.onboarding.dto.Prefs
+import com.google.firebase.firestore.FirebaseFirestore
 
 internal fun NavGraphBuilder.onboarding(
     navigationController: NavController,
     bakingViewModel: BakingViewModel,
     onboardingViewModel: OnboardingViewModel,
+    db: FirebaseFirestore,
     prefs: Prefs
 ) {
     composable<WelcomeScreenNav> {
@@ -57,6 +59,7 @@ internal fun NavGraphBuilder.onboarding(
                 navigationController.popBackStack()
             },
             onboardingViewModel = onboardingViewModel,
+            db = db,
             prefs = prefs
         )
     }

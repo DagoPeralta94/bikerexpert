@@ -21,6 +21,8 @@ import com.devdmp.bikeexpert.ui.theme.BikeExpertTheme
 import com.devdmp.data.onboarding.dto.Prefs
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,6 +38,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
         val currentUser = auth.currentUser
+        val db = Firebase.firestore
         prefs = Prefs(this)
         startDestination = if (currentUser != null && prefs.onboardingCompleted) {
             HomeScreenNav
@@ -67,6 +70,7 @@ class MainActivity : ComponentActivity() {
                             navigationController = navigationController,
                             bakingViewModel = bakingViewModel,
                             onboardingViewModel = onboardingViewModel,
+                            db = db,
                             prefs = prefs
                         )
                         home(

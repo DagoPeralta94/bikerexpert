@@ -1,5 +1,6 @@
 package com.devdmp.bikeexpert.presentation.onboarding
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devdmp.data.onboarding.dto.Prefs
+import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +48,7 @@ fun ThirdScreen(
     goToHome: () -> Unit,
     goToBack: () -> Unit,
     onboardingViewModel: OnboardingViewModel,
+    db: FirebaseFirestore,
     prefs: Prefs
 ) {
     val cylinderCapacity by onboardingViewModel.selectedBrandModel.collectAsState()
@@ -305,12 +308,23 @@ fun ThirdScreen(
                                 .padding(vertical = 8.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
+                            val userPrefsBiker = hashMapOf(
+                                "model" to cylinderCapacity.model,
+                                "brand" to cylinderCapacity.brand,
+                                "cylinderCapacity" to cylinderCapacity.cylinderCapacity,
+                                "bikeType" to cylinderCapacity.bikeType
+                            )
                             Button(
                                 modifier = Modifier.size(height = 42.dp, width = 100.dp),
                                 onClick = {
-                                    prefs.onboardingCompleted = true
-                                    goToHome()
-                                    onboardingViewModel.sendModel(cylinderCapacity)
+                                    db.collection("user_prefs_biker").add(userPrefsBiker).addOnSuccessListener {
+                                        Log.d("Success", "DocumentSnapshot successfully written!")
+                                        prefs.onboardingCompleted = true
+                                        goToHome()
+                                    }
+                                        .addOnFailureListener { e ->
+                                            Log.w("Error", "Error writing document", e)
+                                        }
                                 }) {
                                 Text(text = "Yes")
                             }
